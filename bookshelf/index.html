@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#eeece8" />
+  <meta name="description" content="A quiet collection of books selected for Brooke's reading room." />
+  <title>Brooke's Reading Room</title>
+  <link rel="stylesheet" href="./styles.css?v=20260802-13" />
+  <script defer src="../vendor/lucide/lucide.min.js"></script>
+</head>
+<body>
+  <main class="library">
+    <header class="masthead" aria-labelledby="pageTitle">
+      <div class="masthead-meta" aria-label="Edition details">
+        <p>Selected pages / 2026</p>
+        <p><span id="activeNumber">01</span> / <span id="totalBooks">20</span></p>
+      </div>
+      <h1 id="pageTitle">Brooke's<br />Reading Room</h1>
+    </header>
+
+    <section class="shelf-region" aria-label="Brooke's reading room shelf">
+      <div class="shelf-toolbar">
+        <p id="activeTitle" aria-live="polite">记忆的性别</p>
+        <div class="shelf-actions" role="group" aria-label="Shelf navigation">
+          <button class="icon-button" id="previousBook" type="button" title="Previous book">
+            <i data-lucide="chevron-left"></i>
+            <span class="sr-only">Previous book</span>
+          </button>
+          <button class="icon-button" id="nextBook" type="button" title="Next book">
+            <i data-lucide="chevron-right"></i>
+            <span class="sr-only">Next book</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="shelf-viewport" id="shelfViewport" tabindex="0" aria-describedby="shelfStatus">
+        <div class="books-track" id="booksTrack"></div>
+      </div>
+      <p class="sr-only" id="shelfStatus">Use the arrow keys to move between books. Press Enter to open a book and Escape to return to the shelf.</p>
+      <div class="shelf-rule" aria-hidden="true"></div>
+    </section>
+
+    <section class="book-detail" id="bookDetail" role="dialog" aria-modal="true" aria-labelledby="detailTitle" aria-hidden="true" hidden>
+      <button class="detail-close" id="detailClose" type="button" title="Return to shelf">
+        <i data-lucide="x"></i>
+        <span class="sr-only">Return to shelf</span>
+      </button>
+
+      <div class="detail-book-shell" id="detailBookShell" aria-hidden="true">
+        <div class="detail-book">
+          <div class="detail-face detail-front" id="detailFront"></div>
+        </div>
+      </div>
+
+      <div class="detail-copy" id="detailCopy" tabindex="-1">
+        <div class="detail-copy-meta">
+          <span id="detailNumber">01 / 10</span>
+        </div>
+        <p class="detail-kicker">Brooke Reading Room</p>
+        <h2 id="detailTitle"></h2>
+        <p class="detail-author" id="detailAuthor"></p>
+        <div class="detail-description" id="detailDescription"></div>
+        <div class="detail-footer">
+          <button id="detailReturn" type="button">
+            <i data-lucide="arrow-left"></i>
+            <span>Return to shelf</span>
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script defer src="./catalog.js?v=20260802-5"></script>
+  <script defer src="./app.js?v=20260802-15"></script>
+</body>
+</html>

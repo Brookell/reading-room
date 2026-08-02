@@ -1,0 +1,18 @@
+.DS_Store
+**/.DS_Store
+
+# Local design and Blender source files are not required by the website.
+*.blend
+*.blend1
+/blender/
+/assets/room/models/brooke-study.glb
+
+# Personal documents and exported design drafts.
+*.docx
+*.pdf
+/rainy-old-bookstore-zine-poster.png
+/rainy-old-bookstore-zine-poster.svg
+/reference_study_desk_preview.png
+/render-horses-zine.js
+/studio_workspace_*.png
+/three-horses-waterline-zine-poster.png

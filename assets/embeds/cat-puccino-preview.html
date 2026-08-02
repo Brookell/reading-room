@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cat-puccino Preview</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: "Avenir Next", Avenir, "Segoe UI", sans-serif;
+      background: #fcf9f4;
+      color: #382f25;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: #fcf9f4;
+    }
+
+    body {
+      min-height: 100vh;
+    }
+
+    .screen {
+      position: relative;
+      display: flex;
+      min-height: 100vh;
+      padding: clamp(42px, 8vh, 72px) 20px 30px;
+      flex-direction: column;
+      align-items: center;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 24%, rgba(220, 202, 180, 0.18), transparent 31%),
+        #fcf9f4;
+    }
+
+    .screen::before {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(111, 91, 64, 0.09) 0.7px, transparent 0.7px);
+      background-size: 10px 10px;
+      content: "";
+      opacity: 0.2;
+      pointer-events: none;
+    }
+
+    .identity,
+    .login {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+    }
+
+    .identity {
+      text-align: center;
+    }
+
+    .mascot {
+      position: relative;
+      display: grid;
+      width: 104px;
+      aspect-ratio: 1;
+      margin: 0 auto 13px;
+      place-items: center;
+      border: 1px solid rgba(111, 91, 64, 0.08);
+      border-radius: 50%;
+      background: rgba(240, 233, 223, 0.72);
+      box-shadow: 0 10px 26px rgba(76, 58, 34, 0.08);
+    }
+
+    .mascot img {
+      width: 88%;
+      height: 88%;
+      object-fit: contain;
+    }
+
+    .meow {
+      position: absolute;
+      top: -5px;
+      right: -10px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: #ffd8ca;
+      box-shadow: 0 4px 9px rgba(91, 65, 55, 0.09);
+      color: #6d5b53;
+      font-size: 9px;
+      font-style: italic;
+      font-weight: 700;
+      letter-spacing: 0;
+      transform: rotate(8deg);
+    }
+
+    h1 {
+      margin: 0;
+      color: #6f5b40;
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: 0;
+      line-height: 1;
+    }
+
+    .subtitle {
+      margin: 9px 0 0;
+      color: #3e3429;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .login {
+      display: grid;
+      margin-top: clamp(34px, 7vh, 56px);
+      gap: 13px;
+    }
+
+    .field {
+      display: flex;
+      min-height: 54px;
+      padding: 0 18px;
+      align-items: center;
+      gap: 12px;
+      border-radius: 999px;
+      background: #f6f3ee;
+      color: #aaa29a;
+    }
+
+    .field svg {
+      width: 20px;
+      height: 20px;
+      flex: 0 0 auto;
+      stroke: #8f877f;
+      stroke-width: 1.8;
+    }
+
+    .field span {
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .login-button {
+      min-height: 54px;
+      margin-top: 2px;
+      border: 0;
+      border-radius: 999px;
+      background: #6f5b40;
+      box-shadow: 0 10px 20px rgba(111, 91, 64, 0.18);
+      color: white;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .demo {
+      margin: 13px 0 0;
+      color: #6f5b40;
+      font-size: 11px;
+      font-weight: 800;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .account {
+      margin: clamp(34px, 7vh, 56px) 0 0;
+      color: #53483c;
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .account strong {
+      color: #6f5b40;
+    }
+
+    .legal {
+      display: flex;
+      margin-top: 13px;
+      justify-content: center;
+      gap: 16px;
+      color: #b6afa7;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .legal span + span::before {
+      margin-right: 16px;
+      content: "\2022";
+    }
+  </style>
+</head>
+<body>
+  <main class="screen" aria-label="Cat-puccino login preview">
+    <header class="identity">
+      <div class="mascot">
+        <img src="./cat-cup.png" alt="Cat peeking from a coffee cup" />
+        <span class="meow">MEOW</span>
+      </div>
+      <h1>Cat-puccino</h1>
+      <p class="subtitle">Your daily brew tracker</p>
+    </header>
+
+    <section class="login" aria-label="Login preview">
+      <div class="field">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M20 21a8 8 0 0 0-16 0" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+        <span>Username</span>
+      </div>
+      <div class="field">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect x="4" y="10" width="16" height="11" rx="2" />
+          <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+        </svg>
+        <span>Password</span>
+      </div>
+      <button class="login-button" type="button" tabindex="-1">LOGIN</button>
+      <p class="demo">Visibility&nbsp;&nbsp; Try demo mode</p>
+    </section>
+
+    <p class="account">New here? <strong>Create an account</strong></p>
+      <div class="legal" aria-hidden="true"><span>Privacy</span><span>Terms</span></div>
+  </main>
+</body>
+</html>

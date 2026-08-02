@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#cfccc7" />
+  <meta name="description" content="Step inside Brooke's interactive study." />
+  <title>Brooke's Study</title>
+  <link rel="stylesheet" href="./styles.css?v=20260802-54" />
+  <script src="./vendor/lucide/lucide.min.js"></script>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "./vendor/three/build/three.module.js",
+        "three/addons/": "./vendor/three/addons/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <main id="app" class="is-day">
+    <div class="scene-fallback" aria-hidden="true"></div>
+    <canvas id="scene" aria-label="Interactive 3D study. Select objects to explore Brooke's work and interests."></canvas>
+
+    <section id="rainingIntro" class="raining-intro" aria-label="Opening title" aria-hidden="false">
+      <div id="rainingIntroCharacters" class="raining-intro-characters" aria-hidden="true"></div>
+      <div class="raining-intro-center">
+        <h1 id="rainingIntroTitle">RAINING LETTERS</h1>
+      </div>
+      <div class="raining-intro-cue" aria-hidden="true">
+        <span>SCROLL TO ENTER</span>
+        <span class="raining-intro-arrow">&#8595;</span>
+      </div>
+    </section>
+
+    <div class="toolbar" role="toolbar" aria-label="Room controls">
+      <button id="lampToggle" class="icon-button" type="button" aria-pressed="false" title="Toggle desk lamp">
+        <i data-lucide="lightbulb"></i>
+        <span class="sr-only">Toggle desk lamp</span>
+      </button>
+      <button id="timeToggle" class="icon-button" type="button" aria-pressed="false" title="Switch to night">
+        <i data-lucide="moon"></i>
+        <span class="sr-only">Switch to night</span>
+      </button>
+      <button id="indexToggle" class="icon-button" type="button" aria-expanded="false" aria-controls="objectMenu" title="Open room index">
+        <i data-lucide="list"></i>
+        <span class="sr-only">Open room index</span>
+      </button>
+      <button id="rainingIntroToggle" class="icon-button" type="button" title="Show opening">
+        <i data-lucide="sparkles"></i>
+        <span class="sr-only">Show opening</span>
+      </button>
+    </div>
+
+    <div id="focusControls" class="focus-controls" role="toolbar" aria-label="Camera controls" hidden>
+      <button class="icon-button" type="button" data-camera-action="exit" title="Return to room">
+        <i data-lucide="arrow-left"></i>
+        <span class="sr-only">Return to room</span>
+      </button>
+      <button class="icon-button" type="button" data-camera-action="rotate-left" title="Rotate left">
+        <i data-lucide="rotate-ccw"></i>
+        <span class="sr-only">Rotate left</span>
+      </button>
+      <button class="icon-button" type="button" data-camera-action="rotate-right" title="Rotate right">
+        <i data-lucide="rotate-cw"></i>
+        <span class="sr-only">Rotate right</span>
+      </button>
+      <button class="icon-button" type="button" data-camera-action="zoom-out" title="Zoom out">
+        <i data-lucide="zoom-out"></i>
+        <span class="sr-only">Zoom out</span>
+      </button>
+      <button class="icon-button" type="button" data-camera-action="zoom-in" title="Zoom in">
+        <i data-lucide="zoom-in"></i>
+        <span class="sr-only">Zoom in</span>
+      </button>
+      <button class="icon-button" type="button" data-camera-action="reset" title="Reset view">
+        <i data-lucide="scan"></i>
+        <span class="sr-only">Reset view</span>
+      </button>
+    </div>
+
+    <nav id="objectMenu" class="object-menu" aria-label="Room index" hidden>
+      <button type="button" data-focus-object="laptop">Laptop <span>Terminal</span></button>
+      <button type="button" data-focus-object="books">Bookshelf <span>Reading notes</span></button>
+      <button type="button" data-focus-object="turntable">Turntable <span>Listening shelf</span></button>
+      <button type="button" data-focus-object="coffee">Coffee cup <span>Cat-puccino</span></button>
+      <button type="button" data-focus-object="camera">Camera <span>Kiev-4</span></button>
+      <button type="button" data-focus-object="poster">Wall poster <span>Films and gaze</span></button>
+      <button type="button" data-focus-object="sports">Sports corner <span>Practice and endurance</span></button>
+      <button type="button" data-focus-object="music">Ukulele <span>Voice notes</span></button>
+    </nav>
+
+    <div id="hoverLabel" class="hover-label" aria-hidden="true">
+      <span></span>
+    </div>
+
+    <button id="laptopHotspot" class="laptop-hotspot" type="button" aria-label="Open laptop terminal" hidden></button>
+
+    <section id="contentPanel" class="content-panel" aria-labelledby="panelTitle" aria-hidden="true">
+      <button id="panelClose" class="icon-button panel-close" type="button" title="Return to room">
+        <i data-lucide="x"></i>
+        <span class="sr-only">Return to room</span>
+      </button>
+      <p id="panelEyebrow" class="panel-eyebrow"></p>
+      <h2 id="panelTitle"></h2>
+      <div id="panelBody" class="panel-body"></div>
+    </section>
+
+    <section id="terminalOverlay" class="terminal-overlay" aria-label="Brooke terminal" aria-hidden="true">
+      <div class="terminal-shell">
+        <div class="terminal-bar">
+          <span>guest@brooke: ~</span>
+        </div>
+        <div id="terminalOutput" class="terminal-output" role="log" aria-live="polite"></div>
+        <form id="terminalForm" class="terminal-form" autocomplete="off">
+          <label for="terminalInput" class="terminal-prompt" aria-label="Command prompt">
+            <span class="prompt-user">guest</span><span class="prompt-at">@</span><span class="prompt-host">brooke</span><span>:~$</span>
+          </label>
+          <input id="terminalInput" name="command" type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Terminal command" />
+        </form>
+      </div>
+    </section>
+
+    <section id="loadingOverlay" class="loading-overlay" data-stage="room" aria-live="polite">
+      <div class="loading-simple">
+        <span class="loading-spinner" aria-hidden="true"></span>
+        <p id="loadingPhase">loading room...</p>
+        <p class="loading-guide">left / right drag + wheel to<br />move around<br />click objects to interact</p>
+        <span id="loadingText" class="sr-only">Preparing the study...</span>
+        <span class="loading-progress-data" aria-hidden="true"><span id="loadingBar"></span><span id="loadingPercent">02%</span></span>
+      </div>
+    </section>
+
+    <div id="errorNotice" class="error-notice" role="alert" hidden>
+      <strong>The room could not be opened.</strong>
+      <span>The written archive is still available through the terminal index.</span>
+    </div>
+  </main>
+
+  <script>
+    window.__roomBootTimer = window.setTimeout(() => {
+      const roomApp = document.querySelector("#app");
+      if (roomApp?.classList.contains("is-ready")) return;
+      roomApp?.classList.add("is-ready");
+      const notice = document.querySelector("#errorNotice");
+      if (!notice) return;
+      notice.querySelector("strong").textContent = "The 3D room is taking longer than expected.";
+      notice.querySelector("span").textContent = "The preview image is available while the room finishes loading.";
+      notice.hidden = false;
+    }, 18000);
+  </script>
+  <script type="module" src="./app.js?v=20260802-121"></script>
+</body>
+</html>
