@@ -5,8 +5,59 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 const MODEL_URL = "./assets/room/models/brooke-study-web.glb?v=20260728-2";
 const POSTER_TEXTURE_URL = "./assets/room/textures/delphine-behind-camera.png?v=20260729-1";
+const INTEREST_PHOTOS = {
+  reading: {
+    count: 3,
+    caption: "Reading / 01",
+    note: "Pages, margins, and the places I return to quietly.",
+  },
+  films: {
+    count: 2,
+    caption: "Films / 01",
+    note: "Frames and small observations collected along the way.",
+  },
+  music: {
+    count: 5,
+    caption: "Music / 01",
+    note: "A few scenes from the songs and rooms that stay with me.",
+  },
+  sports: {
+    count: 6,
+    caption: "Sports / 01",
+    note: "Practice, movement, and the patience of repetition.",
+  },
+};
+
+const CURATION_DATA = {
+  reading: {
+    title: "Reading & Film",
+    description: "A quiet observer of the world, gathering fragments of life through literature and cinema. Stories that make room for a different pace of looking.",
+    icon: "book-open",
+    images: ["./assets/photos/interests/web/reading/01.jpg", "./assets/photos/interests/web/reading/02.jpg", "./assets/photos/interests/web/reading/03.jpg"],
+  },
+  music: {
+    title: "Music",
+    description: "Voice notes, records, and first takes that change the temperature of a room. I keep music close for the spaces it opens.",
+    icon: "music-2",
+    images: ["./assets/photos/interests/web/music/01.jpg", "./assets/photos/interests/web/music/02.jpg", "./assets/photos/interests/web/music/03.jpg", "./assets/photos/interests/web/music/04.jpg", "./assets/photos/interests/web/music/05.jpg"],
+  },
+  sports: {
+    title: "Sports",
+    description: "Practice, movement, and the patience of repetition. I return to sport for the quiet focus it leaves behind.",
+    icon: "activity",
+    images: ["./assets/photos/interests/web/sports/01.jpg", "./assets/photos/interests/web/sports/02.jpg", "./assets/photos/interests/web/sports/03.jpg", "./assets/photos/interests/web/sports/04.jpg", "./assets/photos/interests/web/sports/05.jpg", "./assets/photos/interests/web/sports/06.jpg"],
+  },
+  photography: {
+    title: "Photography",
+    description: "Light, distance, and the small details that ask to be kept. A collection of moments from the camera rolls on my desk.",
+    icon: "camera",
+    images: ["./assets/photos/interests/web/films/01.jpg", "./assets/photos/interests/web/films/02.jpg", "./assets/photos/interests/web/reading/01.jpg"],
+  },
+};
 const DESK_CAMERA_MODEL_URL = "./assets/room/models/camera-kiev-4am-helios.glb?v=20260729-1";
+const FILM_ROLL_MODEL_URL = "./assets/room/models/film-roll-35mm.glb?v=20260811-1";
 const COFFEE_CUP_MODEL_URL = "./assets/room/models/coffee-cup.glb?v=20260730-2";
+const BOOKSHELF_EMBED_URL = "./bookshelf/?v=20260811-24";
 const DRACO_URL = "./vendor/three/draco/";
 const MINIMUM_LOADING_TIME = 1500;
 const HOME_VIEW_DISTANCE_SCALE = 0.8;
@@ -395,7 +446,7 @@ const PANEL_CONTENT = {
             <div class="browser-address">127.0.0.1:4173/bookshelf/</div>
           </div>
           <div class="embedded-browser-viewport">
-            <iframe src="./bookshelf/?v=20260802-3" title="Brooke's Reading Room" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+            <iframe src="${BOOKSHELF_EMBED_URL}" title="Brooke's Reading Room" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
             <div class="browser-embed-loading" aria-hidden="true"><span>Opening Reading Room...</span></div>
             <span class="browser-preview-cue" aria-hidden="true"><i data-lucide="maximize-2"></i></span>
             <button class="browser-preview-hit" type="button" data-open-project-browser aria-label="Open Brooke's Reading Room"></button>
@@ -499,94 +550,93 @@ const PANEL_CONTENT = {
       <div class="camera-archive">
         <header class="camera-archive-header">
           <div class="camera-roll-tabs" role="tablist" aria-label="Choose a photo roll">
-            <button class="camera-roll-tab is-active" type="button" role="tab" data-camera-roll="street" aria-selected="true" aria-controls="camera-roll-street">
-              <strong><span></span>Street Notes</strong>
+            <button class="camera-roll-tab is-active" type="button" role="tab" data-camera-roll="open-air" aria-selected="true" aria-controls="camera-roll-open-air">
+              <strong><span></span>Roll 01 · Open Air</strong>
             </button>
-            <button class="camera-roll-tab" type="button" role="tab" data-camera-roll="people" aria-selected="false" aria-controls="camera-roll-people">
-              <strong><span></span>People / Places</strong>
+            <button class="camera-roll-tab" type="button" role="tab" data-camera-roll="quiet-light" aria-selected="false" aria-controls="camera-roll-quiet-light">
+              <strong><span></span>Roll 02 · Quiet Light</strong>
             </button>
-            <button class="camera-roll-tab" type="button" role="tab" data-camera-roll="daily" aria-selected="false" aria-controls="camera-roll-daily">
-              <strong><span></span>Daily Fragments</strong>
+            <button class="camera-roll-tab" type="button" role="tab" data-camera-roll="monochrome-tide" aria-selected="false" aria-controls="camera-roll-monochrome-tide">
+              <strong><span></span>Roll 03 · Monochrome Tide</strong>
             </button>
           </div>
         </header>
 
         <div class="camera-film-stage">
-          <section class="camera-film-roll is-active" id="camera-roll-street" role="tabpanel" data-camera-roll-panel="street" aria-label="Street Notes">
+          <section class="camera-film-roll is-active" id="camera-roll-open-air" role="tabpanel" data-camera-roll-panel="open-air" aria-label="Roll 01, Open Air">
             <div class="camera-film-track">
-              <button class="camera-film-frame is-active" type="button" data-camera-frame aria-pressed="true">
-                <span class="camera-frame-index">1 <i></i></span><span class="camera-frame-image camera-tone-silver"><span>01</span></span><span class="camera-frame-caption"><strong>Street notes</strong></span>
-              </button>
-              <button class="camera-film-frame" type="button" data-camera-frame aria-pressed="false">
-                <span class="camera-frame-index">2 <i></i></span><span class="camera-frame-image camera-tone-sage"><span>02</span></span><span class="camera-frame-caption"><strong>Passing light</strong></span>
-              </button>
-              <button class="camera-film-frame" type="button" data-camera-frame aria-pressed="false">
-                <span class="camera-frame-index">3 <i></i></span><span class="camera-frame-image camera-tone-blue"><span>03</span></span><span class="camera-frame-caption"><strong>Between stations</strong></span>
-              </button>
-              <button class="camera-film-frame" type="button" data-camera-frame aria-pressed="false">
-                <span class="camera-frame-index">4 <i></i></span><span class="camera-frame-image camera-tone-rose"><span>04</span></span><span class="camera-frame-caption"><strong>Last bus home</strong></span>
-              </button>
+              <figure class="camera-film-frame" data-camera-frame>
+                <span class="camera-frame-index">1 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-01/IMG_0079.jpg" alt="A quiet harbour framed by stone posts and a chain" decoding="async" /></span>
+              </figure>
+              <figure class="camera-film-frame" data-camera-frame>
+                <span class="camera-frame-index">2 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-01/IMG_0558.jpg" alt="A bird flying over sunlit water" loading="lazy" decoding="async" /></span>
+              </figure>
+              <figure class="camera-film-frame" data-camera-frame>
+                <span class="camera-frame-index">3 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-01/IMG_9266.jpg" alt="Wind turbines rising above a green field and blue water" loading="lazy" decoding="async" /></span>
+              </figure>
+              <figure class="camera-film-frame" data-camera-frame>
+                <span class="camera-frame-index">4 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-01/IMG_9485.jpg" alt="Horses grazing beside a wide blue lake" loading="lazy" decoding="async" /></span>
+              </figure>
             </div>
           </section>
 
-          <section class="camera-film-roll" id="camera-roll-people" role="tabpanel" data-camera-roll-panel="people" aria-label="People and Places" hidden>
+          <section class="camera-film-roll" id="camera-roll-quiet-light" role="tabpanel" data-camera-roll-panel="quiet-light" aria-label="Roll 02, Quiet Light" hidden>
             <div class="camera-film-track">
-              <button class="camera-film-frame" type="button" data-camera-frame aria-pressed="false"><span class="camera-frame-index">5 <i></i></span><span class="camera-frame-image camera-tone-amber"><span>05</span></span><span class="camera-frame-caption"><strong>A familiar table</strong></span></button>
-              <button class="camera-film-frame" type="button" data-camera-frame aria-pressed="false"><span class="camera-frame-index">6 <i></i></span><span class="camera-frame-image camera-tone-charcoal"><span>06</span></span><span class="camera-frame-caption"><strong>After the conversation</strong></span></button>
-              <button class="camera-film-frame" type="button" data-camera-frame aria-pressed="false"><span class="camera-frame-index">7 <i></i></span><span class="camera-frame-image camera-tone-clay"><span>07</span></span><span class="camera-frame-caption"><strong>Window seat</strong></span></button>
-              <button class="camera-film-frame" type="button" data-camera-frame aria-pressed="false"><span class="camera-frame-index">8 <i></i></span><span class="camera-frame-image camera-tone-moss"><span>08</span></span><span class="camera-frame-caption"><strong>A quiet corner</strong></span></button>
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">5 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-02/IMG_4016.jpg" alt="An empty classroom with green trees beyond the windows" loading="lazy" decoding="async" /></span></figure>
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">6 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-02/IMG_4029.jpg" alt="Late afternoon sunlight falling across a garden path" loading="lazy" decoding="async" /></span></figure>
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">7 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-02/IMG_4031.jpg" alt="Willow trees beside a lake at blue hour" loading="lazy" decoding="async" /></span></figure>
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">8 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-02/IMG_9536.jpg" alt="Golden autumn leaves seen through a dark window" loading="lazy" decoding="async" /></span></figure>
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">9 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-02/IMG_9735.jpg" alt="A quiet landscape held in soft evening light" loading="lazy" decoding="async" /></span></figure>
             </div>
           </section>
 
-          <section class="camera-film-roll" id="camera-roll-daily" role="tabpanel" data-camera-roll-panel="daily" aria-label="Daily Fragments" hidden>
+          <section class="camera-film-roll" id="camera-roll-monochrome-tide" role="tabpanel" data-camera-roll-panel="monochrome-tide" aria-label="Roll 03, Monochrome Tide" hidden>
             <div class="camera-film-track">
-              <button class="camera-film-frame" type="button" data-camera-frame aria-pressed="false"><span class="camera-frame-index">9 <i></i></span><span class="camera-frame-image camera-tone-sky"><span>09</span></span><span class="camera-frame-caption"><strong>Morning weather</strong></span></button>
-              <button class="camera-film-frame" type="button" data-camera-frame aria-pressed="false"><span class="camera-frame-index">10 <i></i></span><span class="camera-frame-image camera-tone-wine"><span>10</span></span><span class="camera-frame-caption"><strong>Red reflection</strong></span></button>
-              <button class="camera-film-frame" type="button" data-camera-frame aria-pressed="false"><span class="camera-frame-index">11 <i></i></span><span class="camera-frame-image camera-tone-paper"><span>11</span></span><span class="camera-frame-caption"><strong>Things left open</strong></span></button>
-              <button class="camera-film-frame" type="button" data-camera-frame aria-pressed="false"><span class="camera-frame-index">12 <i></i></span><span class="camera-frame-image camera-tone-night"><span>12</span></span><span class="camera-frame-caption"><strong>Before lights out</strong></span></button>
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">10 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-03/IMG_9875.jpg" alt="Black-and-white waves breaking against a seawall" loading="lazy" decoding="async" /></span></figure>
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">11 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-03/IMG_9876.jpg" alt="A monochrome marina beneath a hazy skyline" loading="lazy" decoding="async" /></span></figure>
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">12 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-03/IMG_9877.jpg" alt="A black-and-white coastal study from Brooke's archive" loading="lazy" decoding="async" /></span></figure>
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">13 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-03/IMG_9878.jpg" alt="A vertical monochrome study of the shoreline" loading="lazy" decoding="async" /></span></figure>
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">14 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-03/IMG_9879.jpg" alt="A quiet black-and-white moment beside the water" loading="lazy" decoding="async" /></span></figure>
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">15 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-03/IMG_9880.jpg" alt="Light and shadow meeting across a monochrome seascape" loading="lazy" decoding="async" /></span></figure>
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">16 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-03/IMG_9881.jpg" alt="A final black-and-white coastal frame" loading="lazy" decoding="async" /></span></figure>
             </div>
           </section>
         </div>
+
       </div>
     `,
   },
   sports: {
-    eyebrow: "PRACTICE / 8+ YEARS",
-    title: "Endurance is built quietly.",
+    eyebrow: "INTERESTS & HOBBIES",
+    title: "Personal Curations",
     body: `
-      <p>Years of athletic training taught me to stay with repetition long enough for it to become instinct. Table tennis is where patience, speed, and attention meet.</p>
-      <section class="sports-carousel" aria-label="Sports photo archive">
-        <div class="sports-carousel-track" tabindex="0">
-          <article class="sports-slide">
-            <div class="sports-slide-placeholder" aria-label="Photo placeholder"></div>
-            <div class="sports-slide-copy"><span>TABLE TENNIS / 01</span><strong>Practice, repeated.</strong></div>
-          </article>
-          <article class="sports-slide">
-            <div class="sports-slide-placeholder" aria-label="Photo placeholder"></div>
-            <div class="sports-slide-copy"><span>BASKETBALL / 02</span><strong>Reading the court.</strong></div>
-          </article>
-          <article class="sports-slide">
-            <div class="sports-slide-placeholder" aria-label="Photo placeholder"></div>
-            <div class="sports-slide-copy"><span>TRAINING / 03</span><strong>Built over time.</strong></div>
-          </article>
-          <article class="sports-slide">
-            <div class="sports-slide-placeholder" aria-label="Photo placeholder"></div>
-            <div class="sports-slide-copy"><span>MATCH DAY / 04</span><strong>Attention in motion.</strong></div>
-          </article>
-        </div>
-        <div class="sports-carousel-footer">
-          <div class="sports-carousel-progress" role="group" aria-label="Choose a sports photo">
-            <button type="button" data-sports-slide="0" aria-label="Show photo 1" aria-current="true"></button>
-            <button type="button" data-sports-slide="1" aria-label="Show photo 2"></button>
-            <button type="button" data-sports-slide="2" aria-label="Show photo 3"></button>
-            <button type="button" data-sports-slide="3" aria-label="Show photo 4"></button>
+      <div class="curation-experience" data-curation>
+        <div class="curation-main">
+          <div class="curation-gallery">
+            <div class="curation-image-frame"><img data-curation-image src="./assets/photos/interests/web/sports/01.jpg" alt="Sports archive photo 1" /></div>
+            <div class="curation-dots" role="group" aria-label="Choose curation image">
+              <button type="button" data-curation-slide="0" aria-label="Show image 1" aria-current="true"></button>
+              <button type="button" data-curation-slide="1" aria-label="Show image 2"></button>
+              <button type="button" data-curation-slide="2" aria-label="Show image 3"></button>
+              <button type="button" data-curation-slide="3" aria-label="Show image 4"></button>
+              <button type="button" data-curation-slide="4" aria-label="Show image 5"></button>
+              <button type="button" data-curation-slide="5" aria-label="Show image 6"></button>
+            </div>
           </div>
-          <div class="sports-carousel-controls" role="group" aria-label="Sports photo controls">
-            <button type="button" data-sports-carousel="previous" title="Previous photo" disabled><i data-lucide="arrow-left"></i><span class="sr-only">Previous photo</span></button>
-            <button type="button" data-sports-carousel="next" title="Next photo"><i data-lucide="arrow-right"></i><span class="sr-only">Next photo</span></button>
+          <div class="curation-copy">
+            <div class="curation-icon" aria-hidden="true"><i data-lucide="activity"></i></div>
+            <h3 data-curation-title>Sports</h3>
+            <p data-curation-description>Practice, movement, and the patience of repetition. I return to sport for the quiet focus it leaves behind.</p>
+            <div class="curation-tip"><i data-lucide="lightbulb" aria-hidden="true"></i> Click the image or dots to switch photos</div>
           </div>
         </div>
-      </section>
+        <nav class="curation-tabs" aria-label="Choose an interest">
+          <button type="button" data-curation-category="reading" aria-pressed="false">Reading &amp; Film</button>
+          <button type="button" data-curation-category="music" aria-pressed="false">Music</button>
+          <button type="button" data-curation-category="sports" aria-pressed="true">Sports</button>
+          <button type="button" data-curation-category="photography" aria-pressed="false">Photography</button>
+        </nav>
+      </div>
     `,
   },
   music: {
@@ -594,27 +644,17 @@ const PANEL_CONTENT = {
     title: "Songs kept close to the first take.",
     body: `
       <div class="ukulele-audio-note">
-        <section class="ukulele-player" data-ukulele-player aria-label="Ukulele voice note player">
+        <form class="ukulele-access" data-ukulele-access>
+          <label for="ukulelePassword">A small private archive</label>
+          <p>Enter the password to listen.</p>
+          <div class="ukulele-access-row">
+            <input id="ukulelePassword" name="password" type="password" inputmode="numeric" autocomplete="off" maxlength="4" placeholder="----" aria-describedby="ukuleleAccessMessage" />
+            <button type="submit">Enter</button>
+          </div>
+          <span id="ukuleleAccessMessage" class="ukulele-access-message" role="status" aria-live="polite"></span>
+        </form>
+        <section class="ukulele-player" data-ukulele-player aria-label="Ukulele voice note player" hidden>
           <audio data-ukulele-audio preload="metadata"></audio>
-          <header class="ukulele-player-header">
-            <span class="ukulele-rec-mark" aria-hidden="true"></span>
-            <span data-ukulele-counter>VOICE MEMO / 01</span>
-            <span data-ukulele-status>READY TO PLAY</span>
-          </header>
-
-          <div class="ukulele-player-display">
-            <div class="ukulele-waveform" aria-hidden="true">
-              <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
-            </div>
-            <h3 data-ukulele-title>绝对占有 相对自由</h3>
-            <p data-ukulele-meta>Ukulele + voice / voice memo</p>
-          </div>
-
-          <div class="ukulele-progress-row">
-            <input data-ukulele-progress type="range" min="0" max="100" value="0" step="0.1" aria-label="Recording progress" disabled />
-            <div class="ukulele-time" aria-hidden="true"><span data-ukulele-elapsed>0:00</span><span data-ukulele-duration>--:--</span></div>
-          </div>
-
           <div class="ukulele-controls" role="group" aria-label="Voice note controls">
             <button type="button" data-ukulele-action="previous" title="Previous recording"><i data-lucide="skip-back"></i><span class="sr-only">Previous recording</span></button>
             <button class="ukulele-play" type="button" data-ukulele-action="play" title="Play recording"><i data-lucide="play"></i><span class="sr-only">Play recording</span></button>
@@ -744,8 +784,8 @@ const OBJECT_DEFINITIONS = {
     focusPadding: 1.6,
   },
   camera: {
-    label: "Kiev-4 camera",
-    nodes: ["Kiev_4AM_Desk_Camera"],
+    label: "Kiev-4 camera / photo archive",
+    nodes: ["Kiev_4AM_Desk_Camera", "Film_Roll_35mm_Desk", "Film_Roll_35mm_Hit_Target"],
     panel: "camera",
     centered: true,
     focusPadding: 1.15,
@@ -867,9 +907,11 @@ function setLoading(progress, message) {
   loadingBar.style.width = `${clampedProgress}%`;
   loadingPercent.textContent = `${String(Math.round(clampedProgress)).padStart(2, "0")}%`;
   if (message) loadingText.textContent = message;
+  const progressBar = loadingBar.closest("[role=progressbar]");
+  progressBar?.setAttribute("aria-valuenow", String(Math.round(clampedProgress)));
 
   loadingOverlay.dataset.stage = clampedProgress >= 100 ? "ready" : "room";
-  loadingPhase.textContent = clampedProgress >= 100 ? "opening room..." : "loading room...";
+  loadingPhase.textContent = clampedProgress >= 100 ? "Opening room..." : "Loading room...";
 }
 
 function boxForNodes(root, names) {
@@ -1059,6 +1101,61 @@ function loadCoffeeCup(root) {
         coffeeCup.position.add(targetCenter.sub(cupCenter));
         coffeeCup.updateMatrixWorld(true);
         prepareMaterials(coffeeCup);
+        resolve();
+      },
+      undefined,
+      () => resolve(),
+    );
+  });
+}
+
+function loadFilmRoll(root) {
+  return new Promise((resolve) => {
+    const accessoryLoader = new GLTFLoader();
+    accessoryLoader.setDRACOLoader(dracoLoader);
+    accessoryLoader.load(
+      FILM_ROLL_MODEL_URL,
+      (gltf) => {
+        const filmRoll = gltf.scene;
+        filmRoll.name = "Film_Roll_35mm_Desk";
+        root.add(filmRoll);
+
+        const sourceBox = new THREE.Box3().setFromObject(filmRoll);
+        const sourceSize = sourceBox.getSize(new THREE.Vector3());
+        const targetDiameter = 0.095;
+        filmRoll.scale.setScalar(targetDiameter / Math.max(sourceSize.x, sourceSize.z));
+        filmRoll.rotation.y = THREE.MathUtils.degToRad(18);
+        filmRoll.updateMatrixWorld(true);
+
+        const table = root.getObjectByName("Main_Table_Anchor");
+        const deskCamera = root.getObjectByName("Kiev_4AM_Desk_Camera");
+        const tableBox = table ? new THREE.Box3().setFromObject(table) : null;
+        const cameraBox = deskCamera ? new THREE.Box3().setFromObject(deskCamera) : null;
+        const cameraCenter = cameraBox?.getCenter(new THREE.Vector3());
+        const rollBox = new THREE.Box3().setFromObject(filmRoll);
+        const rollSize = rollBox.getSize(new THREE.Vector3());
+        const rollCenter = rollBox.getCenter(new THREE.Vector3());
+        const targetCenter = new THREE.Vector3(
+          cameraBox ? cameraBox.min.x - rollSize.x * 0.72 : -0.84,
+          (tableBox?.max.y ?? 0.94) + (rollCenter.y - rollBox.min.y) + 0.004,
+          cameraCenter ? cameraCenter.z - rollSize.z * 0.08 : -1.67,
+        );
+        filmRoll.position.add(targetCenter.clone().sub(rollCenter));
+        filmRoll.updateMatrixWorld(true);
+        prepareMaterials(filmRoll);
+
+        const hitTarget = new THREE.Mesh(
+          new THREE.BoxGeometry(rollSize.x * 1.75, rollSize.y * 1.35, rollSize.z * 1.75),
+          new THREE.MeshBasicMaterial({
+            transparent: true,
+            opacity: 0,
+            depthWrite: false,
+            colorWrite: false,
+          }),
+        );
+        hitTarget.name = "Film_Roll_35mm_Hit_Target";
+        hitTarget.position.copy(targetCenter);
+        root.add(hitTarget);
         resolve();
       },
       undefined,
@@ -1554,6 +1651,8 @@ function getDeskCameraView() {
   if (!deskCamera) return null;
 
   const focusBox = new THREE.Box3().setFromObject(deskCamera);
+  const filmRoll = modelRoot.getObjectByName("Film_Roll_35mm_Desk");
+  if (filmRoll) focusBox.union(new THREE.Box3().setFromObject(filmRoll));
   const center = focusBox.getCenter(new THREE.Vector3());
   const size = focusBox.getSize(new THREE.Vector3());
   const approach = new THREE.Vector3(-0.28, 0.3, 1).normalize();
@@ -1992,6 +2091,33 @@ function prepareEmbeddedBrowser() {
   window.setTimeout(revealFrame, 5000);
 }
 
+window.addEventListener("message", (event) => {
+  if (event.data?.type !== "brooke:bookshelf-theme") return;
+  const browser = contentPanel.querySelector('.embedded-browser[data-project-browser="bookshelf"]');
+  const frame = browser?.querySelector("iframe");
+  if (!browser || !frame || event.source !== frame.contentWindow) return;
+  let frameOrigin = "null";
+  try {
+    frameOrigin = new URL(frame.src, window.location.href).origin;
+  } catch {
+    return;
+  }
+  if (event.origin !== frameOrigin) return;
+
+  const isHexColor = (value) => typeof value === "string" && /^#[0-9a-f]{6}$/i.test(value);
+  const hasTheme = event.data.state === "detail"
+    && isHexColor(event.data.background)
+    && isHexColor(event.data.ink);
+  browser.classList.toggle("is-book-theme-active", hasTheme);
+  if (hasTheme) {
+    browser.style.setProperty("--bookshelf-theme-bg", event.data.background);
+    browser.style.setProperty("--bookshelf-theme-ink", event.data.ink);
+  } else {
+    browser.style.removeProperty("--bookshelf-theme-bg");
+    browser.style.removeProperty("--bookshelf-theme-ink");
+  }
+});
+
 function resetHerGazePreview() {
   const browser = contentPanel.querySelector(".project-preview-frame");
   const frame = browser?.querySelector("iframe");
@@ -2012,57 +2138,139 @@ function openEmbeddedExperience() {
   prepareEmbeddedBrowser();
 }
 
-function setSportsCarouselSlide(index, behavior = "smooth") {
-  const carousel = contentPanel.querySelector(".sports-carousel");
-  const track = carousel?.querySelector(".sports-carousel-track");
-  const slides = [...(track?.querySelectorAll(".sports-slide") || [])];
-  if (!carousel || !track || !slides.length) return;
-  const nextIndex = Math.max(0, Math.min(index, slides.length - 1));
-  carousel.dataset.activeSlide = String(nextIndex);
-  track.scrollTo({ left: slides[nextIndex].offsetLeft - track.offsetLeft, behavior });
-  carousel.querySelectorAll("[data-sports-slide]").forEach((button, buttonIndex) => {
-    if (buttonIndex === nextIndex) button.setAttribute("aria-current", "true");
-    else button.removeAttribute("aria-current");
-  });
-  const previous = carousel.querySelector('[data-sports-carousel="previous"]');
-  const next = carousel.querySelector('[data-sports-carousel="next"]');
-  if (previous) previous.disabled = nextIndex === 0;
-  if (next) next.disabled = nextIndex === slides.length - 1;
+function getInterestPhotoMarkup(category) {
+  const copy = INTEREST_PHOTOS[category] || INTEREST_PHOTOS.sports;
+  return Array.from({ length: copy.count }, (_, itemIndex) => itemIndex + 1).map((index) => `
+    <figure class="interest-photo-frame">
+      <img data-interest-photo src="./assets/photos/interests/web/${category}/${String(index).padStart(2, "0")}.jpg" alt="${copy.caption} photo ${index}" loading="lazy" decoding="async" />
+      <div class="interest-photo-fallback" aria-hidden="true"><span>0${index}</span></div>
+      <figcaption>${copy.caption.replace("01", String(index).padStart(2, "0"))}</figcaption>
+    </figure>
+  `).join("");
 }
 
-function prepareSportsCarousel() {
-  const carousel = contentPanel.querySelector(".sports-carousel");
-  const track = carousel?.querySelector(".sports-carousel-track");
-  if (!carousel || !track) return;
-  carousel.dataset.activeSlide = "0";
-  let updateTimer = 0;
-  track.addEventListener("scroll", () => {
-    window.clearTimeout(updateTimer);
-    updateTimer = window.setTimeout(() => {
-      const slides = [...track.querySelectorAll(".sports-slide")];
-      const trackLeft = track.getBoundingClientRect().left;
-      const activeIndex = slides.reduce((closestIndex, slide, index) => {
-        const distance = Math.abs(slide.getBoundingClientRect().left - trackLeft);
-        const closestDistance = Math.abs(slides[closestIndex].getBoundingClientRect().left - trackLeft);
-        return distance < closestDistance ? index : closestIndex;
-      }, 0);
-      setSportsCarouselSlide(activeIndex, "auto");
-    }, 120);
-  }, { passive: true });
-  requestAnimationFrame(() => setSportsCarouselSlide(0, "auto"));
+function toggleHobbyInline(category, trigger) {
+  const archive = trigger?.closest("[data-hobby-archive]");
+  const source = archive?.querySelector(`[data-hobby-panel="${category}"]`);
+  if (!archive || !source) return;
+
+  const current = archive.querySelector(`[data-hobby-inline="${category}"]`);
+  if (current) {
+    current.classList.remove("is-visible");
+    trigger.setAttribute("aria-expanded", "false");
+    window.setTimeout(() => current.remove(), 240);
+    return;
+  }
+
+  archive.querySelectorAll("[data-hobby-inline]").forEach((panel) => panel.remove());
+  archive.querySelectorAll("[data-hobby-category]").forEach((item) => item.setAttribute("aria-expanded", "false"));
+
+  const inline = source.cloneNode(true);
+  inline.className = "hobby-inline-panel";
+  inline.hidden = false;
+  inline.removeAttribute("data-hobby-panel");
+  inline.removeAttribute("aria-labelledby");
+  inline.dataset.hobbyInline = category;
+  inline.querySelectorAll("[id]").forEach((element) => element.removeAttribute("id"));
+  inline.querySelector("[data-ukulele-player]")?.remove();
+  const photoStrip = inline.querySelector(".hobby-photo-strip");
+  if (photoStrip) {
+    photoStrip.innerHTML = getInterestPhotoMarkup(category);
+    photoStrip.querySelectorAll("[data-interest-photo]").forEach((image) => {
+      image.addEventListener("error", () => {
+        image.hidden = true;
+        image.nextElementSibling.hidden = false;
+      }, { once: true });
+    });
+  }
+  const note = inline.querySelector(":scope > p");
+  if (note && INTEREST_PHOTOS[category]) note.textContent = INTEREST_PHOTOS[category].note;
+  trigger.insertAdjacentElement("afterend", inline);
+  trigger.setAttribute("aria-expanded", "true");
+  requestAnimationFrame(() => inline.classList.add("is-visible"));
 }
 
-function setCameraArchiveFrame(button) {
-  contentPanel.querySelectorAll("[data-camera-frame]").forEach((frame) => {
-    const active = frame === button;
-    frame.classList.toggle("is-active", active);
-    frame.setAttribute("aria-pressed", String(active));
+function setHobbyCategory(category) {
+  const archive = contentPanel.querySelector("[data-hobby-archive]");
+  const indexView = archive?.querySelector("[data-hobby-index-view]");
+  const detailView = archive?.querySelector("[data-hobby-detail-view]");
+  if (!archive || !indexView || !detailView || !category) return;
+  const panel = detailView.querySelector(`[data-hobby-panel="${category}"]`);
+  if (!panel) return;
+
+  indexView.hidden = true;
+  detailView.hidden = false;
+  detailView.querySelectorAll("[data-hobby-panel]").forEach((item) => {
+    item.hidden = item !== panel;
   });
-  button.scrollIntoView({
-    behavior: reduceMotion ? "auto" : "smooth",
-    block: "nearest",
-    inline: "center",
-  });
+  const label = detailView.querySelector("[data-hobby-detail-label]");
+  if (label) label.textContent = category.toUpperCase();
+  archive.dataset.activeHobby = category;
+  contentPanel.scrollTop = 0;
+}
+
+function resetHobbyCategory() {
+  const archive = contentPanel.querySelector("[data-hobby-archive]");
+  const indexView = archive?.querySelector("[data-hobby-index-view]");
+  const detailView = archive?.querySelector("[data-hobby-detail-view]");
+  if (!archive || !indexView || !detailView) return;
+  archive.querySelectorAll("[data-hobby-inline]").forEach((panel) => panel.remove());
+  archive.querySelectorAll("[data-hobby-category]").forEach((item) => item.setAttribute("aria-expanded", "false"));
+  indexView.hidden = false;
+  detailView.hidden = true;
+  archive.removeAttribute("data-active-hobby");
+  contentPanel.scrollTop = 0;
+}
+
+function prepareHobbyArchive() {
+  resetHobbyCategory();
+}
+
+function prepareCuration() {
+  const root = contentPanel.querySelector("[data-curation]");
+  if (!root) return;
+  const tabs = [...root.querySelectorAll("[data-curation-category]")];
+  const dots = [...root.querySelectorAll("[data-curation-slide]")];
+  const image = root.querySelector("[data-curation-image]");
+  const title = root.querySelector("[data-curation-title]");
+  const description = root.querySelector("[data-curation-description]");
+  const icon = root.querySelector(".curation-icon");
+  let category = "sports";
+  let slideIndex = 0;
+
+  const render = (nextCategory = category, nextIndex = slideIndex) => {
+    const data = CURATION_DATA[nextCategory] || CURATION_DATA.sports;
+    category = nextCategory;
+    slideIndex = (nextIndex + data.images.length) % data.images.length;
+    tabs.forEach((tab) => tab.setAttribute("aria-pressed", String(tab.dataset.curationCategory === category)));
+    dots.forEach((dot, index) => {
+      const visible = index < data.images.length;
+      dot.hidden = !visible;
+      if (visible) {
+        dot.setAttribute("aria-current", String(index === slideIndex));
+        dot.setAttribute("aria-label", `Show ${data.title} image ${index + 1}`);
+      }
+    });
+    if (image) {
+      image.classList.add("is-changing");
+      window.setTimeout(() => {
+        image.src = data.images[slideIndex];
+        image.alt = `${data.title} archive photo ${slideIndex + 1}`;
+        image.classList.remove("is-changing");
+      }, reduceMotion ? 0 : 120);
+    }
+    if (title) title.textContent = data.title;
+    if (description) description.textContent = data.description;
+    if (icon) {
+      icon.innerHTML = `<i data-lucide="${data.icon}"></i>`;
+      window.lucide?.createIcons({ attrs: { "aria-hidden": "true" } });
+    }
+  };
+
+  tabs.forEach((tab) => tab.addEventListener("click", () => render(tab.dataset.curationCategory, 0)));
+  dots.forEach((dot) => dot.addEventListener("click", () => render(category, Number(dot.dataset.curationSlide))));
+  image?.addEventListener("click", () => render(category, slideIndex + 1));
+  render();
 }
 
 function setCameraArchiveRoll(button) {
@@ -2089,8 +2297,6 @@ function setCameraArchiveRoll(button) {
 function prepareCameraArchive() {
   const firstRoll = contentPanel.querySelector("[data-camera-roll]");
   if (firstRoll) setCameraArchiveRoll(firstRoll);
-  const firstFrame = contentPanel.querySelector("[data-camera-roll-panel]:not([hidden]) [data-camera-frame]");
-  if (firstFrame) setCameraArchiveFrame(firstFrame);
 }
 
 function formatRecordingTime(value) {
@@ -2108,19 +2314,37 @@ function stopUkuleleAudio() {
   audio.load();
 }
 
+function prepareUkuleleAccess() {
+  const access = contentPanel.querySelector("[data-ukulele-access]");
+  const player = contentPanel.querySelector("[data-ukulele-player]");
+  const input = access?.querySelector("input[name=\"password\"]");
+  const message = access?.querySelector("[data-ukulele-access-message], .ukulele-access-message");
+  if (!access || !player || !input) return;
+
+  access.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const unlocked = input.value.trim() === "2026";
+    if (!unlocked) {
+      input.value = "";
+      input.setAttribute("aria-invalid", "true");
+      if (message) message.textContent = "That password does not open this recording.";
+      input.focus({ preventScroll: true });
+      return;
+    }
+
+    input.removeAttribute("aria-invalid");
+    access.hidden = true;
+    player.hidden = false;
+    prepareUkulelePlayer();
+  });
+}
+
 function prepareUkulelePlayer() {
   const player = contentPanel.querySelector("[data-ukulele-player]");
   const audio = player?.querySelector("[data-ukulele-audio]");
   const trackButtons = [...(contentPanel.querySelectorAll("[data-ukulele-track]") || [])];
   const playButton = player?.querySelector('[data-ukulele-action="play"]');
-  const progress = player?.querySelector("[data-ukulele-progress]");
-  const elapsed = player?.querySelector("[data-ukulele-elapsed]");
-  const duration = player?.querySelector("[data-ukulele-duration]");
-  const counter = player?.querySelector("[data-ukulele-counter]");
-  const status = player?.querySelector("[data-ukulele-status]");
-  const title = player?.querySelector("[data-ukulele-title]");
-  const meta = player?.querySelector("[data-ukulele-meta]");
-  if (!player || !audio || !trackButtons.length || !playButton || !progress) return;
+  if (!player || !audio || !trackButtons.length || !playButton) return;
 
   let currentIndex = 0;
 
@@ -2134,13 +2358,6 @@ function prepareUkulelePlayer() {
     window.lucide?.createIcons({ attrs: { "aria-hidden": "true" } });
   };
 
-  const resetTimeline = () => {
-    progress.value = "0";
-    progress.disabled = true;
-    if (elapsed) elapsed.textContent = "0:00";
-    if (duration) duration.textContent = "--:--";
-  };
-
   const selectTrack = (index, autoplay = false) => {
     const nextIndex = (index + trackButtons.length) % trackButtons.length;
     const nextTrack = trackButtons[nextIndex];
@@ -2152,13 +2369,8 @@ function prepareUkulelePlayer() {
     trackButtons.forEach((button, buttonIndex) => {
       button.setAttribute("aria-pressed", String(buttonIndex === nextIndex));
     });
-    if (counter) counter.textContent = `VOICE MEMO / ${String(nextIndex + 1).padStart(2, "0")}`;
-    if (status) status.textContent = "READY TO PLAY";
-    if (title) title.textContent = nextTrack.dataset.title || `Recording ${nextIndex + 1}`;
-    if (meta) meta.textContent = nextTrack.dataset.meta || "Ukulele + voice";
     player.classList.remove("is-playing", "has-audio-error");
     setPlayIcon(false);
-    resetTimeline();
     if (autoplay) playButton.click();
   };
 
@@ -2174,7 +2386,6 @@ function prepareUkulelePlayer() {
     } catch {
       player.classList.remove("is-playing");
       player.classList.add("has-audio-error");
-      if (status) status.textContent = "ADD AUDIO FILE";
       setPlayIcon(false);
     }
   };
@@ -2200,37 +2411,22 @@ function prepareUkulelePlayer() {
   });
 
   audio.addEventListener("loadedmetadata", () => {
-    progress.disabled = false;
-    progress.max = String(audio.duration || 0);
-    if (duration) duration.textContent = formatRecordingTime(audio.duration);
     trackButtons[currentIndex].querySelector(".ukulele-track-duration").textContent = formatRecordingTime(audio.duration);
-    if (status) status.textContent = "READY";
   });
   audio.addEventListener("play", () => {
     player.classList.add("is-playing");
     player.classList.remove("has-audio-error");
-    if (status) status.textContent = "PLAYING";
     setPlayIcon(true);
   });
   audio.addEventListener("pause", () => {
-    if (audio.ended || !audio.currentTime) return;
     player.classList.remove("is-playing");
-    if (status) status.textContent = "PAUSED";
     setPlayIcon(false);
-  });
-  audio.addEventListener("timeupdate", () => {
-    if (!progress.matches(":active")) progress.value = String(audio.currentTime || 0);
-    if (elapsed) elapsed.textContent = formatRecordingTime(audio.currentTime);
   });
   audio.addEventListener("ended", () => selectTrack(currentIndex + 1, true));
   audio.addEventListener("error", () => {
     player.classList.remove("is-playing");
     player.classList.add("has-audio-error");
-    if (status) status.textContent = "ADD AUDIO FILE";
     setPlayIcon(false);
-  });
-  progress.addEventListener("input", () => {
-    if (Number.isFinite(audio.duration)) audio.currentTime = Number(progress.value);
   });
 
   selectTrack(0);
@@ -2261,9 +2457,9 @@ function openPanel(key) {
   contentPanel.classList.add("is-open");
   contentPanel.setAttribute("aria-hidden", "false");
   window.lucide?.createIcons({ attrs: { "aria-hidden": "true" } });
-  if (key === "sports") prepareSportsCarousel();
+  if (key === "sports") prepareCuration();
   if (key === "camera") prepareCameraArchive();
-  if (key === "music") prepareUkulelePlayer();
+  if (key === "music") prepareUkuleleAccess();
   if (key === "books" || key === "poster" || key === "turntable" || key === "coffee") prepareEmbeddedBrowser();
   if (opensDirectlyInBrowser) {
     requestAnimationFrame(() => contentPanel.querySelector(".project-preview-frame iframe")?.focus({ preventScroll: true }));
@@ -2913,28 +3109,11 @@ contentPanel.addEventListener("click", (event) => {
     else setHerGazeExpanded(false);
     return;
   }
-  const sportsDirection = target?.closest("[data-sports-carousel]")?.dataset.sportsCarousel;
-  if (sportsDirection) {
-    const carousel = contentPanel.querySelector(".sports-carousel");
-    const currentIndex = Number(carousel?.dataset.activeSlide || 0);
-    setSportsCarouselSlide(currentIndex + (sportsDirection === "next" ? 1 : -1));
-    return;
-  }
-  const sportsDot = target?.closest("[data-sports-slide]");
-  if (sportsDot) {
-    setSportsCarouselSlide(Number(sportsDot.dataset.sportsSlide));
-    return;
-  }
+  const curationCategory = target?.closest("[data-curation-category]");
+  if (curationCategory) return;
   const cameraRoll = target?.closest("[data-camera-roll]");
   if (cameraRoll) {
     setCameraArchiveRoll(cameraRoll);
-    const firstFrame = contentPanel.querySelector(`[data-camera-roll-panel="${cameraRoll.dataset.cameraRoll}"] [data-camera-frame]`);
-    if (firstFrame) setCameraArchiveFrame(firstFrame);
-    return;
-  }
-  const cameraFrame = target?.closest("[data-camera-frame]");
-  if (cameraFrame) {
-    setCameraArchiveFrame(cameraFrame);
     return;
   }
   const filmButton = target?.closest("[data-film-note]");
@@ -3039,15 +3218,6 @@ function resize() {
     }
   }
 
-  if (contentPanel.classList.contains("is-camera-panel")) {
-    requestAnimationFrame(() => {
-      contentPanel.querySelector("[data-camera-frame].is-active")?.scrollIntoView({
-        behavior: "auto",
-        block: "nearest",
-        inline: "center",
-      });
-    });
-  }
 }
 
 window.addEventListener("resize", resize);
@@ -3099,6 +3269,7 @@ loader.load(
     prepareMaterials(modelRoot);
     stabilizeUkuleleSurfaces(roomModel);
     await loadDeskCamera(modelRoot);
+    await loadFilmRoll(modelRoot);
     await loadCoffeeCup(modelRoot);
     registerInteractiveObjects(modelRoot);
     registerLaptopScreen(modelRoot);

@@ -7,6 +7,15 @@
 /blender/
 /assets/room/models/brooke-study.glb
 
+# Keep full-resolution camera originals local; the site uses scrubbed web copies.
+/assets/photos/camera/roll-*/
+
+# Keep full-resolution interest photos local; the site uses scrubbed web copies.
+/assets/photos/interests/reading/
+/assets/photos/interests/films/
+/assets/photos/interests/music/
+/assets/photos/interests/sports/
+
 # Personal documents and exported design drafts.
 *.docx
 *.pdf

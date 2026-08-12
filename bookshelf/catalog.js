@@ -41,7 +41,7 @@ function normalizeImage(value) {
   const image = String(value ?? "").trim();
   if (!image) return "";
   if (/^(?:\.\.?\/|https?:\/\/|\/)/i.test(image)) return image;
-  return `../assets/books/covers/${image}`;
+  return `./assets/covers/${image}`;
 }
 
 function parseBooksTable(text) {

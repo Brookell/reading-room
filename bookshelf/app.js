@@ -8,6 +8,14 @@ const activeNumber = document.querySelector("#activeNumber");
 const totalBooks = document.querySelector("#totalBooks");
 const previousBook = document.querySelector("#previousBook");
 const nextBook = document.querySelector("#nextBook");
+const bookIndexToggle = document.querySelector("#bookIndexToggle");
+const bookIndex = document.querySelector("#bookIndex");
+const bookIndexClose = document.querySelector("#bookIndexClose");
+const bookIndexCount = document.querySelector("#bookIndexCount");
+const bookIndexList = document.querySelector("#bookIndexList");
+const shelfHelpToggle = document.querySelector("#shelfHelpToggle");
+const shelfHelp = document.querySelector("#shelfHelp");
+const shelfHelpClose = document.querySelector("#shelfHelpClose");
 const library = document.querySelector(".library");
 const masthead = document.querySelector(".masthead");
 const shelfRegion = document.querySelector(".shelf-region");
@@ -29,7 +37,6 @@ let dragStartX = 0;
 let dragStartScroll = 0;
 let isDragging = false;
 let hasDragged = false;
-let pressedBookElement = null;
 let didSetInitialScroll = false;
 let detailIndex = null;
 let detailOriginRect = null;
@@ -37,6 +44,8 @@ let detailOpenTimer = 0;
 let detailCopyTimer = 0;
 let detailSettleTimer = 0;
 let detailCloseTimer = 0;
+let bookIndexCloseTimer = 0;
+let shelfHelpCloseTimer = 0;
 
 const escapeHtml = (value) => String(value).replace(/[&<>"]/g, (character) => ({
   "&": "&amp;",
@@ -74,6 +83,110 @@ function readableDetailInk(book) {
   const dark = "#161514";
   const light = "#f5f1e9";
   return colorContrast(background, dark) > colorContrast(background, light) ? dark : light;
+}
+
+function notifyParentTheme(book = null) {
+  if (window.parent === window) return;
+  let targetOrigin = "*";
+  try {
+    const referrerOrigin = new URL(document.referrer).origin;
+    if (referrerOrigin !== "null") targetOrigin = referrerOrigin;
+  } catch {
+    // Local file previews have no usable parent origin.
+  }
+  window.parent.postMessage({
+    type: "brooke:bookshelf-theme",
+    state: book ? "detail" : "shelf",
+    background: book ? (book.detailColor ?? book.color) : null,
+    ink: book ? readableDetailInk(book) : null,
+  }, targetOrigin);
+}
+
+function renderBookIndex() {
+  bookIndexCount.textContent = String(books.length).padStart(2, "0");
+  bookIndexList.innerHTML = books.map((book, index) => `
+    <li>
+      <button type="button" data-book-index="${index}" aria-label="Open ${escapeHtml(book.title)}">
+        <span class="book-index-number">${String(index + 1).padStart(2, "0")}</span>
+        <span class="book-index-swatch" style="--book-index-color: ${book.spine}" aria-hidden="true"></span>
+        <span class="book-index-copy">
+          <strong>${escapeHtml(book.title)}</strong>
+          <small>${escapeHtml(book.author)}</small>
+        </span>
+        <i data-lucide="arrow-up-right" aria-hidden="true"></i>
+      </button>
+    </li>
+  `).join("");
+}
+
+function closeShelfHelp({ restoreFocus = false, immediate = false } = {}) {
+  if (shelfHelp.hidden) return;
+  window.clearTimeout(shelfHelpCloseTimer);
+  shelfHelp.classList.remove("is-visible");
+  shelfHelp.setAttribute("aria-hidden", "true");
+  shelfHelpToggle.setAttribute("aria-expanded", "false");
+  const finish = () => {
+    if (!shelfHelp.classList.contains("is-visible")) shelfHelp.hidden = true;
+  };
+  if (immediate) finish();
+  else shelfHelpCloseTimer = window.setTimeout(finish, 240);
+  if (restoreFocus) viewport.focus({ preventScroll: true });
+}
+
+function toggleShelfHelp() {
+  if (!shelfHelp.hidden) {
+    closeShelfHelp({ restoreFocus: true });
+    return;
+  }
+  window.clearTimeout(shelfHelpCloseTimer);
+  shelfHelp.hidden = false;
+  shelfHelp.setAttribute("aria-hidden", "false");
+  shelfHelpToggle.setAttribute("aria-expanded", "true");
+  requestAnimationFrame(() => shelfHelp.classList.add("is-visible"));
+}
+
+function openBookIndex() {
+  if (detailIndex !== null) return;
+  closeShelfHelp({ immediate: true });
+  window.clearTimeout(bookIndexCloseTimer);
+  pinnedIndex = null;
+  if (activeIndex !== null) closeBook(activeIndex, true);
+  bookElements.forEach((element) => element.classList.remove("is-hovered"));
+  bookIndex.hidden = false;
+  bookIndex.setAttribute("aria-hidden", "false");
+  bookIndexToggle.setAttribute("aria-expanded", "true");
+  requestAnimationFrame(() => {
+    library.classList.add("is-index-open");
+    bookIndex.classList.add("is-visible");
+    bookIndexClose.focus({ preventScroll: true });
+  });
+}
+
+function closeBookIndex({ restoreFocus = true, immediate = false } = {}) {
+  if (bookIndex.hidden) return;
+  window.clearTimeout(bookIndexCloseTimer);
+  library.classList.remove("is-index-open");
+  bookIndex.classList.remove("is-visible");
+  bookIndex.setAttribute("aria-hidden", "true");
+  bookIndexToggle.setAttribute("aria-expanded", "false");
+  const finish = () => {
+    if (!bookIndex.classList.contains("is-visible")) bookIndex.hidden = true;
+  };
+  if (immediate) finish();
+  else bookIndexCloseTimer = window.setTimeout(finish, 480);
+  if (restoreFocus) bookIndexToggle.focus({ preventScroll: true });
+}
+
+function openBookFromIndex(index) {
+  closeBookIndex({ restoreFocus: false, immediate: true });
+  pinnedIndex = index;
+  openBook(index, true);
+  window.clearTimeout(detailOpenTimer);
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  detailOpenTimer = window.setTimeout(() => {
+    detailOpenTimer = 0;
+    openBookDetail(index);
+  }, prefersReducedMotion ? 20 : 180);
 }
 
 function coverMarkup(book, index) {
@@ -123,38 +236,35 @@ function createBook(book, index) {
       <span class="book-cover${book.originalCover ? " has-original-cover" : ""}">${coverMarkup(book, index)}</span>
     </span>
     <span class="book-spine" aria-hidden="true"><span class="spine-title">${safeTitle}</span></span>
+    <span class="book-hit-area" aria-hidden="true"></span>
   `;
 
-  element.addEventListener("mouseenter", () => {
-    if (isDragging || pinnedIndex !== null) return;
-    openBook(index, false);
-  });
-  element.addEventListener("mouseleave", (event) => {
-    if (pinnedIndex !== null) return;
-    const next = event.relatedTarget;
-    if (next instanceof Element && next.closest(".book-slot") === element) return;
-    closeBook(index);
-  });
-  element.addEventListener("focus", () => {
+  const hitArea = element.querySelector(".book-hit-area");
+  hitArea.addEventListener("mouseenter", () => {
+    if (isDragging) return;
+    if (pinnedIndex !== null && pinnedIndex !== index) return;
+    element.classList.add("is-hovered");
     if (pinnedIndex === null) openBook(index, false);
   });
-  element.addEventListener("blur", () => {
-    if (pinnedIndex === null) closeBook(index);
+  element.addEventListener("mouseleave", () => {
+    element.classList.remove("is-hovered");
+    if (pinnedIndex === null && activeIndex === index) closeBook(index);
   });
   element.addEventListener("click", (event) => {
     if (hasDragged) {
       event.preventDefault();
       return;
     }
-    pinnedIndex = index;
+
     const wasOpen = activeIndex === index && element.classList.contains("is-open");
-    openBook(index, true);
     window.clearTimeout(detailOpenTimer);
+    pinnedIndex = index;
+    openBook(index, true);
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     detailOpenTimer = window.setTimeout(() => {
       detailOpenTimer = 0;
       openBookDetail(index);
-    }, prefersReducedMotion ? 20 : wasOpen ? 40 : 360);
+    }, prefersReducedMotion ? 20 : wasOpen ? 80 : 420);
   });
 
   track.append(element);
@@ -202,10 +312,12 @@ function applyBookShifts(index) {
   const extra = book.width - book.spineWidth;
   const beforeShift = openSide === "right" ? -extra * 0.34 : -extra * 0.68;
   const afterShift = openSide === "right" ? extra * 0.66 : extra * 0.32;
+  const activeShift = openSide === "right" ? beforeShift : afterShift;
 
   bookElements.forEach((element, itemIndex) => {
-    const shift = itemIndex < index ? beforeShift : itemIndex > index ? afterShift : 0;
+    const shift = itemIndex < index ? beforeShift : itemIndex > index ? afterShift : activeShift;
     element.style.setProperty("--shift", `${Math.round(shift)}px`);
+    element.style.setProperty("--hit-shift", `${Math.round(-shift)}px`);
   });
 }
 
@@ -245,7 +357,10 @@ function openBook(index, pin = false) {
 }
 
 function resetBookShifts() {
-  bookElements.forEach((element) => element.style.setProperty("--shift", "0px"));
+  bookElements.forEach((element) => {
+    element.style.setProperty("--shift", "0px");
+    element.style.setProperty("--hit-shift", "0px");
+  });
 }
 
 function closeBook(index, force = false) {
@@ -313,6 +428,7 @@ function positionDetailBook() {
 
 function openBookDetail(index) {
   if (detailIndex !== null || activeIndex !== index) return;
+  closeShelfHelp({ immediate: true });
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const source = bookElements[index].querySelector(".book-object");
   const sourceRect = source.getBoundingClientRect();
@@ -328,6 +444,7 @@ function openBookDetail(index) {
   window.clearTimeout(detailCloseTimer);
   detailIndex = index;
   populateBookDetail(index);
+  notifyParentTheme(books[index]);
   detailCopy.classList.remove("is-visible");
   detail.classList.remove("is-returning");
   detail.classList.remove("is-settled");
@@ -369,6 +486,7 @@ function closeBookDetail() {
   detail.classList.remove("is-settled");
   detailCopy.classList.remove("is-visible");
   library.classList.remove("is-detail-open");
+  notifyParentTheme();
   if (detailOriginRect) detailBookShell.style.transform = getShellTransform(detailOriginRect, target);
 
   detailCloseTimer = window.setTimeout(() => {
@@ -383,8 +501,9 @@ function closeBookDetail() {
     shelfRegion.removeAttribute("aria-hidden");
     shelfRegion.removeAttribute("inert");
     shelfRegion.inert = false;
+    bookElements[returnIndex].classList.remove("is-hovered");
+    closeBook(returnIndex, true);
     bookElements[returnIndex].focus({ preventScroll: true });
-    keepCoverInView(returnIndex);
   }, prefersReducedMotion ? 20 : 1040);
 }
 
@@ -403,6 +522,7 @@ function navigateTo(index) {
 }
 
 books.forEach(createBook);
+renderBookIndex();
 totalBooks.textContent = String(books.length).padStart(2, "0");
 activeTitle.textContent = books[0].title;
 window.lucide?.createIcons({ attrs: { "aria-hidden": "true" } });
@@ -424,7 +544,6 @@ viewport.addEventListener("pointerdown", (event) => {
   dragStartScroll = viewport.scrollLeft;
   isDragging = true;
   hasDragged = false;
-  pressedBookElement = event.target instanceof Element ? event.target.closest(".book-slot") : null;
 });
 
 viewport.addEventListener("pointermove", (event) => {
@@ -432,6 +551,7 @@ viewport.addEventListener("pointermove", (event) => {
   const distance = event.clientX - dragStartX;
   if (Math.abs(distance) > 5 && !hasDragged) {
     hasDragged = true;
+    bookElements.forEach((element) => element.classList.remove("is-hovered"));
     viewport.classList.add("is-dragging");
     viewport.setPointerCapture(event.pointerId);
   }
@@ -439,57 +559,98 @@ viewport.addEventListener("pointermove", (event) => {
   viewport.scrollLeft = dragStartScroll - distance;
 });
 
-function endDrag(event, allowTap = false) {
+function endDrag(event) {
   if (!isDragging) return;
-  const tappedBook = allowTap && !hasDragged ? pressedBookElement : null;
-  const pointerWasDragged = hasDragged;
   isDragging = false;
-  pressedBookElement = null;
   viewport.classList.remove("is-dragging");
   if (viewport.hasPointerCapture(event.pointerId)) viewport.releasePointerCapture(event.pointerId);
   window.setTimeout(() => {
-    if (!pointerWasDragged && tappedBook && detailIndex === null && detailOpenTimer === 0) {
-      tappedBook.click();
-    }
     hasDragged = false;
   }, 0);
 }
 
-viewport.addEventListener("pointerup", (event) => endDrag(event, true));
-viewport.addEventListener("pointercancel", (event) => endDrag(event, false));
-
-viewport.addEventListener("keydown", (event) => {
-  const current = activeIndex ?? 0;
-  if (event.key === "ArrowRight") {
-    event.preventDefault();
-    navigateTo(current + 1);
-  } else if (event.key === "ArrowLeft") {
-    event.preventDefault();
-    navigateTo(current - 1);
-  } else if (event.key === "Escape") {
-    pinnedIndex = null;
-    if (activeIndex !== null) closeBook(activeIndex, true);
-    viewport.focus();
-  }
-});
+viewport.addEventListener("pointerup", endDrag);
+viewport.addEventListener("pointercancel", endDrag);
 
 previousBook.addEventListener("click", () => navigateTo((activeIndex ?? 0) - 1));
 nextBook.addEventListener("click", () => navigateTo((activeIndex ?? -1) + 1));
+shelfHelpToggle.addEventListener("click", toggleShelfHelp);
+shelfHelpClose.addEventListener("click", () => closeShelfHelp({ restoreFocus: true }));
+bookIndexToggle.addEventListener("click", openBookIndex);
+bookIndexClose.addEventListener("click", () => closeBookIndex());
+bookIndexList.addEventListener("click", (event) => {
+  const button = event.target instanceof Element ? event.target.closest("[data-book-index]") : null;
+  if (!button) return;
+  const index = Number(button.dataset.bookIndex);
+  if (Number.isInteger(index) && books[index]) openBookFromIndex(index);
+});
 
 detailClose.addEventListener("click", closeBookDetail);
 detailReturn.addEventListener("click", closeBookDetail);
 
 document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && detailIndex !== null) {
-    event.preventDefault();
-    closeBookDetail();
+  const isSpace = event.code === "Space" || event.key === " ";
+  if (detailIndex !== null) {
+    if (isSpace && !(event.target instanceof HTMLButtonElement)) {
+      event.preventDefault();
+      if (!event.repeat) closeBookDetail();
+    } else if (event.key === "Escape") {
+      event.preventDefault();
+      closeBookDetail();
+    }
+    return;
   }
+
+  if (!bookIndex.hidden) {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      closeBookIndex();
+    }
+    return;
+  }
+
+  if (!shelfHelp.hidden) {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      closeShelfHelp({ restoreFocus: true });
+    }
+    return;
+  }
+
+  const target = event.target instanceof Element ? event.target : null;
+  const focusedBook = target?.closest(".book-slot");
+  if (target?.closest("button") && !focusedBook) return;
+  const focusedIndex = focusedBook ? Number(focusedBook.dataset.index) : null;
+  const current = Number.isInteger(focusedIndex) ? focusedIndex : (activeIndex ?? 0);
+
+  if (event.key === "ArrowRight") {
+    event.preventDefault();
+    if (!event.repeat) navigateTo(current + 1);
+  } else if (event.key === "ArrowLeft") {
+    event.preventDefault();
+    if (!event.repeat) navigateTo(current - 1);
+  } else if (isSpace) {
+    event.preventDefault();
+    if (!event.repeat) bookElements[current]?.click();
+  } else if (event.key === "Escape") {
+    pinnedIndex = null;
+    if (activeIndex !== null) closeBook(activeIndex, true);
+    viewport.focus({ preventScroll: true });
+  }
+});
+
+document.addEventListener("pointerdown", (event) => {
+  if (shelfHelp.hidden) return;
+  if (shelfHelp.contains(event.target) || shelfHelpToggle.contains(event.target)) return;
+  closeShelfHelp();
 });
 
 window.addEventListener("resize", () => {
   measureShelf();
   if (detailIndex !== null && !detail.classList.contains("is-returning")) positionDetailBook();
 });
+
+notifyParentTheme();
 }).catch((error) => {
   console.error(error);
   const status = document.querySelector("#activeTitle");

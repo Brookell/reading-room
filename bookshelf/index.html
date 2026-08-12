@@ -6,14 +6,13 @@
   <meta name="theme-color" content="#eeece8" />
   <meta name="description" content="A quiet collection of books selected for Brooke's reading room." />
   <title>Brooke's Reading Room</title>
-  <link rel="stylesheet" href="./styles.css?v=20260802-13" />
-  <script defer src="../vendor/lucide/lucide.min.js"></script>
+  <link rel="stylesheet" href="./styles.css?v=20260811-27" />
+  <script defer src="./vendor/lucide/lucide.min.js"></script>
 </head>
 <body>
   <main class="library">
     <header class="masthead" aria-labelledby="pageTitle">
       <div class="masthead-meta" aria-label="Edition details">
-        <p>Selected pages / 2026</p>
         <p><span id="activeNumber">01</span> / <span id="totalBooks">20</span></p>
       </div>
       <h1 id="pageTitle">Brooke's<br />Reading Room</h1>
@@ -23,6 +22,14 @@
       <div class="shelf-toolbar">
         <p id="activeTitle" aria-live="polite">记忆的性别</p>
         <div class="shelf-actions" role="group" aria-label="Shelf navigation">
+          <button class="icon-button shelf-help-toggle" id="shelfHelpToggle" type="button" title="How to use the shelf" aria-expanded="false" aria-controls="shelfHelp">
+            <i data-lucide="info"></i>
+            <span class="sr-only">How to use the shelf</span>
+          </button>
+          <button class="icon-button book-index-toggle" id="bookIndexToggle" type="button" title="View all books" aria-expanded="false" aria-controls="bookIndex">
+            <i data-lucide="list"></i>
+            <span class="sr-only">View all books</span>
+          </button>
           <button class="icon-button" id="previousBook" type="button" title="Previous book">
             <i data-lucide="chevron-left"></i>
             <span class="sr-only">Previous book</span>
@@ -34,11 +41,43 @@
         </div>
       </div>
 
+      <aside class="shelf-help" id="shelfHelp" role="dialog" aria-labelledby="shelfHelpTitle" aria-hidden="true" hidden>
+        <header>
+          <p id="shelfHelpTitle">Shelf controls</p>
+          <button class="shelf-help-close" id="shelfHelpClose" type="button" title="Close shelf controls">
+            <i data-lucide="x"></i>
+            <span class="sr-only">Close shelf controls</span>
+          </button>
+        </header>
+        <div class="shelf-help-row">
+          <i data-lucide="mouse-pointer-2" aria-hidden="true"></i>
+          <p><strong>Mouse</strong><span>Hover to preview · Click to open</span></p>
+        </div>
+        <div class="shelf-help-row">
+          <i data-lucide="keyboard" aria-hidden="true"></i>
+          <p><strong>Keyboard</strong><span><kbd>←</kbd><kbd>→</kbd> choose · <kbd>Space</kbd> open / return</span></p>
+        </div>
+      </aside>
+
       <div class="shelf-viewport" id="shelfViewport" tabindex="0" aria-describedby="shelfStatus">
         <div class="books-track" id="booksTrack"></div>
       </div>
-      <p class="sr-only" id="shelfStatus">Use the arrow keys to move between books. Press Enter to open a book and Escape to return to the shelf.</p>
+      <p class="sr-only" id="shelfStatus">Use the left and right arrow keys to choose a book. Press Space to open it or return to the shelf.</p>
       <div class="shelf-rule" aria-hidden="true"></div>
+    </section>
+
+    <section class="book-index" id="bookIndex" aria-labelledby="bookIndexTitle" aria-hidden="true" hidden>
+      <header class="book-index-header">
+        <div>
+          <p>Book index / <span id="bookIndexCount">20</span> volumes</p>
+          <h2 id="bookIndexTitle">All books</h2>
+        </div>
+        <button class="book-index-close" id="bookIndexClose" type="button" title="Return to shelf">
+          <i data-lucide="x"></i>
+          <span class="sr-only">Return to shelf</span>
+        </button>
+      </header>
+      <ol class="book-index-list" id="bookIndexList"></ol>
     </section>
 
     <section class="book-detail" id="bookDetail" role="dialog" aria-modal="true" aria-labelledby="detailTitle" aria-hidden="true" hidden>
@@ -71,7 +110,7 @@
     </section>
   </main>
 
-  <script defer src="./catalog.js?v=20260802-5"></script>
-  <script defer src="./app.js?v=20260802-15"></script>
+  <script defer src="./catalog.js?v=20260811-6"></script>
+  <script defer src="./app.js?v=20260811-28"></script>
 </body>
 </html>

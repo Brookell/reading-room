@@ -1,9 +1,9 @@
-# Brooke 书架：添加一本书
+# Brooke 书架：快速添加一本书
 
 以后添加书籍只需要两步：
 
-1. 把封面图片放进 `/Users/brooke/Documents/Brooke/assets/books/covers/`。
-2. 在 `/Users/brooke/Documents/Brooke/bookshelf/books.tsv` 最后增加一行，然后刷新 [书架页面](http://127.0.0.1:4173/bookshelf/)。
+1. 把封面图片放进当前项目的 `assets/covers/`。
+2. 在 `books.tsv` 最后增加一行，然后刷新书架页面。
 
 `books.tsv` 是一个以 Tab 分隔的表格，可以直接用 Numbers、Excel 或文本编辑器打开。请保留第一行的列名，每本书占一整行，不要在单元格内换行。
 
@@ -26,4 +26,6 @@
 
 除书名、作者和封面图片外，其余单元格留空会自动使用默认值。不需要出版社一列。
 
-请使用 `http://127.0.0.1:4173/bookshelf/` 查看书架。通过 `file://` 直接打开页面时，浏览器无法读取书单表格。
+如果从书架目录启动服务器，请使用 `http://127.0.0.1:4173/` 查看；如果从 Brooke 主项目启动，请使用 `http://127.0.0.1:4173/bookshelf/` 查看。通过 `file://` 直接打开页面时，浏览器无法读取书单表格。
+
+完整的部署、下载恢复、GitHub Pages 和扩展功能说明请查看 `README.md`。
