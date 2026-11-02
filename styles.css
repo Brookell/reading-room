@@ -3604,15 +3604,26 @@ textarea:focus-visible {
   }
 }
 
-/* Portrait photos sit letterboxed inside the 3:2 film frame instead of being cropped. */
-.camera-frame-image.is-portrait {
-  background: #1b1a1a;
+/* Portrait photos get a narrower frame at the same height, so they show in full without side bars. */
+.camera-film-frame.is-portrait {
+  min-width: calc(280px / 1.5 * var(--frame-ratio));
+  flex-basis: calc((100% - 20px) / 3 / 1.5 * var(--frame-ratio));
 }
 
-.camera-frame-image.is-portrait img {
+.camera-film-frame.is-portrait .camera-frame-image {
+  aspect-ratio: var(--frame-ratio);
+}
+
+.camera-film-frame.is-portrait .camera-frame-image img {
   position: absolute;
   inset: 0;
-  object-fit: contain;
+}
+
+@media (max-width: 720px) {
+  .camera-film-frame.is-portrait {
+    min-width: 0;
+    flex-basis: calc(82% / 1.5 * var(--frame-ratio));
+  }
 }
 
 /* With more rolls than fit on one line, let the roll tabs wrap on wider screens. */
