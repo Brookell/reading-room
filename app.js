@@ -559,6 +559,24 @@ const PANEL_CONTENT = {
             <button class="camera-roll-tab" type="button" role="tab" data-camera-roll="monochrome-tide" aria-selected="false" aria-controls="camera-roll-monochrome-tide">
               <strong><span></span>Roll 03 · Monochrome Tide</strong>
             </button>
+            <button class="camera-roll-tab" type="button" role="tab" data-camera-roll="limestone-coves" aria-selected="false" aria-controls="camera-roll-limestone-coves">
+              <strong><span></span>Roll 04 · Limestone Coves</strong>
+            </button>
+            <button class="camera-roll-tab" type="button" role="tab" data-camera-roll="midsummer-blue" aria-selected="false" aria-controls="camera-roll-midsummer-blue">
+              <strong><span></span>Roll 05 · Midsummer Blue</strong>
+            </button>
+            <button class="camera-roll-tab" type="button" role="tab" data-camera-roll="brick-and-bronze" aria-selected="false" aria-controls="camera-roll-brick-and-bronze">
+              <strong><span></span>Roll 06 · Brick and Bronze</strong>
+            </button>
+            <button class="camera-roll-tab" type="button" role="tab" data-camera-roll="last-train" aria-selected="false" aria-controls="camera-roll-last-train">
+              <strong><span></span>Roll 07 · Last Train</strong>
+            </button>
+            <button class="camera-roll-tab" type="button" role="tab" data-camera-roll="valley-weather" aria-selected="false" aria-controls="camera-roll-valley-weather">
+              <strong><span></span>Roll 08 · Valley Weather</strong>
+            </button>
+            <button class="camera-roll-tab" type="button" role="tab" data-camera-roll="first-snow" aria-selected="false" aria-controls="camera-roll-first-snow">
+              <strong><span></span>Roll 09 · First Snow</strong>
+            </button>
           </div>
         </header>
 
@@ -599,6 +617,65 @@ const PANEL_CONTENT = {
               <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">14 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-03/IMG_9879.jpg" alt="A quiet black-and-white moment beside the water" loading="lazy" decoding="async" /></span></figure>
               <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">15 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-03/IMG_9880.jpg" alt="Light and shadow meeting across a monochrome seascape" loading="lazy" decoding="async" /></span></figure>
               <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">16 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-03/IMG_9881.jpg" alt="A final black-and-white coastal frame" loading="lazy" decoding="async" /></span></figure>
+            </div>
+          </section>
+
+          <section class="camera-film-roll" id="camera-roll-limestone-coves" role="tabpanel" data-camera-roll-panel="limestone-coves" aria-label="Roll 04, Limestone Coves" hidden>
+            <div class="camera-film-track">
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">17 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-04/01-lookout.jpg" alt="Hikers pausing at a lookout above a limestone inlet" loading="lazy" decoding="async" /></span></figure>
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">18 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-04/02-pines.jpg" alt="Swimmers in turquoise water, glimpsed through pine branches" loading="lazy" decoding="async" /></span></figure>
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">19 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-04/03-cove-friends.jpg" alt="Two friends resting on the rocks of a sunlit cove" loading="lazy" decoding="async" /></span></figure>
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">20 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-04/04-clear-water.jpg" alt="Clear green water rippling over stone at the cove's edge" loading="lazy" decoding="async" /></span></figure>
+            </div>
+          </section>
+
+          <section class="camera-film-roll" id="camera-roll-midsummer-blue" role="tabpanel" data-camera-roll-panel="midsummer-blue" aria-label="Roll 05, Midsummer Blue" hidden>
+            <div class="camera-film-track">
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">21 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-05/01-pebble-beach.jpg" alt="Sunbathers and bright umbrellas along a glittering pebble shore" loading="lazy" decoding="async" /></span></figure>
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">22 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-05/02-parasail.jpg" alt="A parasail drifting above a crowded beach and a field of sails" loading="lazy" decoding="async" /></span></figure>
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">23 <i></i></span><span class="camera-frame-image is-portrait"><img src="./assets/photos/camera/web/roll-05/03-afternoon-sand.jpg" alt="An afternoon on the sand, two boats anchored beyond the swimmers" loading="lazy" decoding="async" /></span></figure>
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">24 <i></i></span><span class="camera-frame-image is-portrait"><img src="./assets/photos/camera/web/roll-05/04-evening-chairs.jpg" alt="An older couple in folding chairs, watching the evening water" loading="lazy" decoding="async" /></span></figure>
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">25 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-05/05-horizon-sails.jpg" alt="A scatter of sailboats along a shimmering horizon" loading="lazy" decoding="async" /></span></figure>
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">26 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-05/06-lone-sail.jpg" alt="A single sail alone on a deep blue sea" loading="lazy" decoding="async" /></span></figure>
+            </div>
+          </section>
+
+          <section class="camera-film-roll" id="camera-roll-brick-and-bronze" role="tabpanel" data-camera-roll-panel="brick-and-bronze" aria-label="Roll 06, Brick and Bronze" hidden>
+            <div class="camera-film-track">
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">27 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-06/01-bronze-rider.jpg" alt="A bronze rider rearing against the sky beside a green cathedral dome" loading="lazy" decoding="async" /></span></figure>
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">28 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-06/02-station-ruin.jpg" alt="A ruined brick station facade with an empty bench before it" loading="lazy" decoding="async" /></span></figure>
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">29 <i></i></span><span class="camera-frame-image is-portrait"><img src="./assets/photos/camera/web/roll-06/03-red-brick.jpg" alt="Two people talking beneath a red-brick facade and a protest banner" loading="lazy" decoding="async" /></span></figure>
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">30 <i></i></span><span class="camera-frame-image is-portrait"><img src="./assets/photos/camera/web/roll-06/04-panorama-tower.jpg" alt="A curved museum tower lettered against a heavy grey sky" loading="lazy" decoding="async" /></span></figure>
+            </div>
+          </section>
+
+          <section class="camera-film-roll" id="camera-roll-last-train" role="tabpanel" data-camera-roll-panel="last-train" aria-label="Roll 07, Last Train" hidden>
+            <div class="camera-film-track">
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">31 <i></i></span><span class="camera-frame-image is-portrait"><img src="./assets/photos/camera/web/roll-07/01-museum-banners.jpg" alt="Hanging museum banners glowing amber against the night sky" loading="lazy" decoding="async" /></span></figure>
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">32 <i></i></span><span class="camera-frame-image is-portrait"><img src="./assets/photos/camera/web/roll-07/02-canal-night.jpg" alt="Crowds gathered along a lamplit canal beneath old guild houses" loading="lazy" decoding="async" /></span></figure>
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">33 <i></i></span><span class="camera-frame-image is-portrait"><img src="./assets/photos/camera/web/roll-07/03-couple.jpg" alt="A couple arm in arm, watching the lit facades across the water" loading="lazy" decoding="async" /></span></figure>
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">34 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-07/04-u-bahn-entrance.jpg" alt="Figures passing through a glowing U-Bahn entrance at night" loading="lazy" decoding="async" /></span></figure>
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">35 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-07/05-yellow-train.jpg" alt="A yellow train waiting along an empty platform" loading="lazy" decoding="async" /></span></figure>
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">36 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-07/06-empty-concourse.jpg" alt="An empty station concourse under strips of white light" loading="lazy" decoding="async" /></span></figure>
+            </div>
+          </section>
+
+          <section class="camera-film-roll" id="camera-roll-valley-weather" role="tabpanel" data-camera-roll-panel="valley-weather" aria-label="Roll 08, Valley Weather" hidden>
+            <div class="camera-film-track">
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">37 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-08/01-grey-lake.jpg" alt="Two small boats resting on a grey alpine lake" loading="lazy" decoding="async" /></span></figure>
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">38 <i></i></span><span class="camera-frame-image is-portrait"><img src="./assets/photos/camera/web/roll-08/02-lakeside-road.jpg" alt="A camper van rounding a lakeside bend beneath a dusting of snow" loading="lazy" decoding="async" /></span></figure>
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">39 <i></i></span><span class="camera-frame-image is-portrait"><img src="./assets/photos/camera/web/roll-08/03-old-town.jpg" alt="Red rooftops and church spires of an old town in autumn" loading="lazy" decoding="async" /></span></figure>
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">40 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-08/04-pine-valley.jpg" alt="A valley village glimpsed between dark pines" loading="lazy" decoding="async" /></span></figure>
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">41 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-08/05-path-to-peaks.jpg" alt="A path leading toward snow-capped peaks through golden fields" loading="lazy" decoding="async" /></span></figure>
+            </div>
+          </section>
+
+          <section class="camera-film-roll" id="camera-roll-first-snow" role="tabpanel" data-camera-roll-panel="first-snow" aria-label="Roll 09, First Snow" hidden>
+            <div class="camera-film-track">
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">42 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-09/01-morning-peak.jpg" alt="Morning light catching a snow-covered peak above a misty village" loading="lazy" decoding="async" /></span></figure>
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">43 <i></i></span><span class="camera-frame-image is-portrait"><img src="./assets/photos/camera/web/roll-09/02-arch-view.jpg" alt="Two riders crossing beneath a glacier, seen through an arched opening" loading="lazy" decoding="async" /></span></figure>
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">44 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-09/03-jagged-ridge.jpg" alt="A jagged ridge of fresh snow under a clear blue sky" loading="lazy" decoding="async" /></span></figure>
+              <figure class="camera-film-frame" data-camera-frame><span class="camera-frame-index">45 <i></i></span><span class="camera-frame-image"><img src="./assets/photos/camera/web/roll-09/04-mirror-lake.jpg" alt="Snowy peaks mirrored in a still alpine lake" loading="lazy" decoding="async" /></span></figure>
             </div>
           </section>
         </div>

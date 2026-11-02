@@ -3603,3 +3603,22 @@ textarea:focus-visible {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Portrait photos sit letterboxed inside the 3:2 film frame instead of being cropped. */
+.camera-frame-image.is-portrait {
+  background: #1b1a1a;
+}
+
+.camera-frame-image.is-portrait img {
+  position: absolute;
+  inset: 0;
+  object-fit: contain;
+}
+
+/* With more rolls than fit on one line, let the roll tabs wrap on wider screens. */
+@media (min-width: 721px) {
+  .camera-roll-tabs {
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
+}
